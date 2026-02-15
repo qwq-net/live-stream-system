@@ -13,3 +13,6 @@ Taskfile.yml text
 *.jpg binary
 *.gif binary
 *.ico binary
+
+# Demo files
+*.html

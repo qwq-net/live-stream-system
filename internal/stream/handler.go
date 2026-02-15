@@ -12,28 +12,22 @@ import (
 	"github.com/nareix/joy4/format/rtmp"
 )
 
-// Handler manages video streams.
 type Handler struct {
 	queues map[string]*pubsub.Queue
 	mutex  sync.RWMutex
 }
 
-// NewHandler creates a new stream handler.
 func NewHandler() *Handler {
 	return &Handler{
 		queues: make(map[string]*pubsub.Queue),
 	}
 }
 
-// HandleRTMPPublish handles RTMP publish requests.
 func (h *Handler) HandleRTMPPublish(conn *rtmp.Conn) {
 	streams, _ := conn.Streams()
 	path := conn.URL.Path
 
-	// Normalize path key (e.g., /live/test key)
 	key := strings.TrimPrefix(path, "/")
-
-	log.Printf("DEBUG: RTMP Publish Path: %s, Registered Key: %s", path, key)
 
 	queue := pubsub.NewQueue()
 	queue.WriteHeader(streams)
@@ -54,14 +48,9 @@ func (h *Handler) HandleRTMPPublish(conn *rtmp.Conn) {
 	log.Printf("Stream closed: %s", key)
 }
 
-// HandleHTTPPlay handles HTTP-FLV playback requests.
 func (h *Handler) HandleHTTPPlay(w http.ResponseWriter, r *http.Request) {
-	// Path example: /live/test.flv
 	path := r.URL.Path
 
-	// key should match the publish key.
-	// If publish is /live/test, key is live/test
-	// basic mapping logic: remove leading slash and .flv extension
 	key := strings.TrimPrefix(path, "/")
 	key = strings.TrimSuffix(key, ".flv")
 
@@ -69,18 +58,7 @@ func (h *Handler) HandleHTTPPlay(w http.ResponseWriter, r *http.Request) {
 	queue, exists := h.queues[key]
 	h.mutex.RUnlock()
 
-	log.Printf("DEBUG: HTTP Play Request Path: %s, Derived Key: %s, Exists: %v", path, key, exists)
-
 	if !exists {
-		// Debug existing keys
-		h.mutex.RLock()
-		keys := make([]string, 0, len(h.queues))
-		for k := range h.queues {
-			keys = append(keys, k)
-		}
-		h.mutex.RUnlock()
-		log.Printf("DEBUG: Available keys: %v", keys)
-
 		http.NotFound(w, r)
 		return
 	}

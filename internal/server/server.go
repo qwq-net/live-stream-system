@@ -9,13 +9,11 @@ import (
 	"github.com/nareix/joy4/format/rtmp"
 )
 
-// Server represents the streaming server.
 type Server struct {
 	config *config.Config
 	stream *stream.Handler
 }
 
-// New creating a new server instance.
 func New(cfg *config.Config) *Server {
 	return &Server{
 		config: cfg,
@@ -23,10 +21,7 @@ func New(cfg *config.Config) *Server {
 	}
 }
 
-// Start starts the RTMP and HTTP servers.
-// This method blocks.
 func (s *Server) Start() {
-	// RTMP Server
 	rtmpServer := &rtmp.Server{
 		Addr: ":" + s.config.RTMPPort,
 	}
@@ -40,8 +35,6 @@ func (s *Server) Start() {
 		}
 	}()
 
-	// HTTP Server
-	// Serve static files from web directory
 	fs := http.FileServer(http.Dir("./web"))
 	http.Handle("/", fs)
 
