@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Stream Player</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      #controls {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+      }
+      input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 200px;
+      }
+      button {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      video {
+        width: 80%;
+        max-width: 800px;
+        background-color: black;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Live Stream Player (mpegts.js)</h1>
+
+    <div id="controls">
+      <input
+        type="text"
+        id="streamKey"
+        placeholder="Stream Key (e.g., test)"
+        value="test"
+      />
+      <button id="playButton">Play</button>
+    </div>
+
+    <video id="videoElement" controls autoplay muted></video>
+
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
+    <script>
+      let player = null;
+
+      const loadStream = () => {
+        const streamKey = document.getElementById("streamKey").value;
+        if (!streamKey) {
+          alert("Please enter a stream key.");
+          return;
+        }
+
+        if (mpegts.getFeatureList().mseLivePlayback) {
+          const videoElement = document.getElementById("videoElement");
+
+          if (player) {
+            player.destroy();
+          }
+
+          const url = `http://${window.location.host}/live/${streamKey}.flv`;
+          console.log(`Loading stream: ${url}`);
+
+          player = mpegts.createPlayer({
+            type: "flv",
+            isLive: true,
+            url,
+          });
+
+          player.attachMediaElement(videoElement);
+          player.load();
+          player.play().catch((error) => {
+            console.error("Error playing stream:", error);
+          });
+        } else {
+          alert("Your browser does not support MSE Live Playback.");
+        }
+      };
+
+      document.getElementById("playButton").addEventListener("click", loadStream);
+    </script>
+  </body>
+</html>

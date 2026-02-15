@@ -41,6 +41,10 @@ func (s *Server) Start() {
 	}()
 
 	// HTTP Server
+	// Serve static files from web directory
+	fs := http.FileServer(http.Dir("./web"))
+	http.Handle("/", fs)
+
 	http.HandleFunc("/live/", s.stream.HandleHTTPPlay)
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

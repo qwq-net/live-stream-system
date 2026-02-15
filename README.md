@@ -17,26 +17,11 @@ Go言語によるリアルタイム動画ストリーミング・サーバーの
 GoとTaskがインストールされていることを確認してください。
 
 - [Go Installation Guide](https://go.dev/doc/install)
-- [Task Installation Guide](https://taskfile.dev/installation/)
 
-### 2. コードのフォーマット
-
-```bash
-task fmt
-```
-
-### 3. アプリケーションの実行
-
-ローカル環境で直接実行する場合：
+以下でプロジェクト内で有効な task コマンド一覧を確認できます。
 
 ```bash
-task run
-```
-
-Docker Composeを使用して実行する場合：
-
-```bash
-task docker:up
+task --list
 ```
 
 ## プロジェクト構成
@@ -54,17 +39,3 @@ task docker:up
 ├── Dockerfile           # アプリケーションのDockerイメージ定義
 └── compose.yaml         # Docker Compose構成ファイル
 ```
-
-## 利用可能なタスク一覧
-
-`task --list` で詳細を確認できます。
-
-| コマンド            | 内容                   |
-| :------------------ | :--------------------- |
-| `task fmt`          | Goコードのフォーマット |
-| `task test`         | テストの実行           |
-| `task build`        | 実行バイナリのビルド   |
-| `task run`          | ローカルでの実行       |
-| `task docker:build` | Dockerイメージのビルド |
-| `task docker:up`    | Docker Composeでの起動 |
-| `task docker:down`  | Docker Composeでの停止 |

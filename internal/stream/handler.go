@@ -33,6 +33,8 @@ func (h *Handler) HandleRTMPPublish(conn *rtmp.Conn) {
 	// Normalize path key (e.g., /live/test key)
 	key := strings.TrimPrefix(path, "/")
 
+	log.Printf("DEBUG: RTMP Publish Path: %s, Registered Key: %s", path, key)
+
 	queue := pubsub.NewQueue()
 	queue.WriteHeader(streams)
 
@@ -67,7 +69,18 @@ func (h *Handler) HandleHTTPPlay(w http.ResponseWriter, r *http.Request) {
 	queue, exists := h.queues[key]
 	h.mutex.RUnlock()
 
+	log.Printf("DEBUG: HTTP Play Request Path: %s, Derived Key: %s, Exists: %v", path, key, exists)
+
 	if !exists {
+		// Debug existing keys
+		h.mutex.RLock()
+		keys := make([]string, 0, len(h.queues))
+		for k := range h.queues {
+			keys = append(keys, k)
+		}
+		h.mutex.RUnlock()
+		log.Printf("DEBUG: Available keys: %v", keys)
+
 		http.NotFound(w, r)
 		return
 	}
