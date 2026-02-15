@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+.dockerignore
+Dockerfile
+compose.yaml
+compose.override.yaml
+
+# Build
+bin/
+video-server
+dist/
+
+# Documentation
+README.md
+docs/
+Taskfile.yml
+
+# Go
+vendor/
+*.test
+*.out
+
+# OS
+.DS_Store

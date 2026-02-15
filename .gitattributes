@@ -1,0 +1,15 @@
+# Default to LF
+* text=auto eol=lf
+
+# Go files
+*.go text diff=golang
+
+# Documentation
+*.md text
+Taskfile.yml text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary

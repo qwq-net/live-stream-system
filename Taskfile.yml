@@ -1,0 +1,42 @@
+version: "3"
+
+tasks:
+  fmt:
+    desc: Goコードのフォーマットを行います
+    cmds:
+      - go fmt ./...
+
+  test:
+    desc: テストを実行します
+    cmds:
+      - go test -v ./...
+
+  build:
+    desc: バイナリをビルドします
+    cmds:
+      - go build -o bin/video-server ./cmd/video-server/main.go
+
+  run:
+    desc: アプリケーションを実行します
+    cmds:
+      - go run ./cmd/video-server/main.go
+
+  clean:
+    desc: ビルド生成物を削除します
+    cmds:
+      - rm -rf bin/
+
+  docker:build:
+    desc: Dockerイメージをビルドします
+    cmds:
+      - docker build -t live-stream-system .
+
+  docker:up:
+    desc: Docker Composeでサービスを起動します
+    cmds:
+      - docker compose up -d
+
+  docker:down:
+    desc: Docker Composeでサービスを停止します
+    cmds:
+      - docker compose down
