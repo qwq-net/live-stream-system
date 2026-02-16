@@ -15,4 +15,4 @@ Taskfile.yml text
 *.ico binary
 
 # Demo files
-*.html text
+*.html text linguist-detectable=false
